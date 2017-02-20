@@ -39,7 +39,7 @@ public abstract class Account implements java.io.Serializable {
     }
 
     /**
-     * Method: getName()
+     * Method: getBalance()
      * Inputs: -
      * Returns: float
      *
@@ -50,7 +50,7 @@ public abstract class Account implements java.io.Serializable {
     }
 
     /**
-     * Method: getname()
+     * Method: getName()
      * Inputs: -
      * Returns: String
      *
