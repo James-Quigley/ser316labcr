@@ -1,23 +1,38 @@
+/*
+ * File: Main.java
+ * Author: Kevin Gary
+ * Date: February 20, 2017
+ *
+ * Description: Main.java is the main class for the project. It contains
+ * the main() method and will start the banking program
+ */
 package banking.gui;
 
 import javax.swing.JFrame;
 
 /**
- * main method for running the program.
- * @author kevinagary
- *
+ * class: Main
+ * 
+ * Description: Main is the main class for the project. It contains
+ * the main() method and will start the banking program
  */
 final class Main {
 	/**
-	 * Private constructor to address STYLE issue.
+	 * Method: Main()
+	 * Inputs: -
+	 * Returns: Void
+	 * 
+	 * Description: Constructor
 	 */
 	private Main() {
 	}
 	
 	/**
-	 * All methods should have a Javadoc according to STYLE.
-	 * @param args command-line arguments
-	 * @throws Exception as per typical main specifications
+	 * Method: main()
+	 * Inputs: String[] args
+	 * Returns: Void
+	 * 
+	 * Description: main() method for Lab4 project
 	 */
 	public static void main(final String[] args) throws Exception {
 
