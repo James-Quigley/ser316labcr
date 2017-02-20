@@ -64,7 +64,7 @@ public interface AccountServer {
 	/**
 	 * Method: saveAccounts()
 	 * Inputs:
-	 * Returns:
+	 * Returns: void
 	 *
 	 * Description: Writes all accounts to accounts.ser
 	 */
