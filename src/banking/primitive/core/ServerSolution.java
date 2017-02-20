@@ -1,3 +1,10 @@
+/*
+ * File: ServerSolution.java
+ * Author: Kevin Gary
+ * Date: February 20, 2017
+ *
+ * Description: Main server for program
+ */
 package banking.primitive.core;
 
 import java.util.ArrayList;
@@ -8,33 +15,48 @@ import java.io.*;
 
 import banking.primitive.core.Account.State;
 
+/*
+ * Class: Checking
+ *
+ * Description: Main server class for program
+ */
 class ServerSolution implements AccountServer {
 
-	static String fileName = "../../accounts.ser";
+	static String _fileName = "../../accounts.ser";
 
 	Map<String,Account> accountMap = null;
 
+	/**
+	 * Method: ServerSolution()
+	 * Inputs: -
+	 * Returns: Void
+	 *
+	 * Description: Constructor
+	 */
 	public ServerSolution() {
 		accountMap = new HashMap<String,Account>();
-		File file = new File(fileName);
+		File file = new File(_fileName);
 		ObjectInputStream in = null;
 		try {
 			if (file.exists()) {
-				System.out.println("Reading from file " + fileName + "...");
+				System.out.println("Reading from file " + _fileName + "...");
 				in = new ObjectInputStream(new FileInputStream(file));
 
 				Integer sizeI = (Integer) in.readObject();
 				int size = sizeI.intValue();
 				for (int i=0; i < size; i++) {
 					Account acc = (Account) in.readObject();
-					if (acc != null)
+					if (acc != null){
 						accountMap.put(acc.getName(), acc);
+					}
 				}
 			}
-		} catch (Exception e) {
+		}
+		catch (Exception e) {
 			System.out.println(e.getMessage());
 			e.printStackTrace();
-		} finally {
+		}
+		finally {
 			if (in != null) {
 				try {
 					in.close();
@@ -45,6 +67,115 @@ class ServerSolution implements AccountServer {
 		}
 	}
 	
+	/**
+	 * Method: getAccount()
+	 * Inputs: String account name
+	 * Returns: Account
+	 *
+	 * Description: Getter for account with the given name
+	 */
+	public Account getAccount(String name) {
+		return accountMap.get(name);
+	}
+
+	/**
+	 * Method: getAllActiveAccounts()
+	 * Inputs: -
+	 * Returns: List<Account>
+	 *
+	 * Description: Returns an array with all active accounts in the server
+	 */
+	public List<Account> getActiveAccounts() {
+		List<Account> result = new ArrayList<Account>();
+
+		for (Account acc : accountMap.values()) {
+			if (acc.getState() != State.CLOSED) {
+				result.add(acc);
+			}
+		}
+		return result;
+	}
+
+	/**
+	 * Method: getAllAccounts()
+	 * Inputs: -
+	 * Returns: List<Account>
+	 *
+	 * Description: Returns an array with all accounts in the server
+	 */
+	public List<Account> getAllAccounts() {
+		return new ArrayList<Account>(accountMap.values());
+	}
+
+	/**
+	 * Method: newAccount
+	 * Inputs: String account type, String account name, float balance
+	 * Returns: boolean success
+	 *
+	 * Description: Indirectly creates a new account by calling newAccountFactory
+	 */
+	public boolean newAccount(String type, String name, float balance) 
+		throws IllegalArgumentException {
+		
+		if (balance < 0.0f) throw new IllegalArgumentException("New account may not be started with a negative balance");
+		
+		return newAccountFactory(type, name, balance);
+	}
+	
+	/**
+	 * Method: closeAccount()
+	 * Inputs: String account name
+	 * Returns: boolean success
+	 *
+	 * Description: Closes an account with the given name
+	 */
+	public boolean closeAccount(String name) {
+		Account acc = accountMap.get(name);
+		if (acc == null) {
+			return false;
+		}
+		acc.setState(State.CLOSED);
+		return true;
+	}
+
+	
+	/**
+	 * Method: saveAccounts()
+	 * Inputs: -
+	 * Returns: Void
+	 *
+	 * Description: Saves all accounts to a .ser file
+	 */
+	public void saveAccounts() throws IOException {
+		ObjectOutputStream out = null; 
+		try {
+			out = new ObjectOutputStream(new FileOutputStream(_fileName));
+
+			out.writeObject(Integer.valueOf(accountMap.size()));
+			for (String name : accountMap.keySet()) {
+				out.writeObject(accountMap.get(name));
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new IOException("Could not write file:" + _fileName);
+		} finally {
+			if (out != null) {
+				try {
+					out.close();
+				} catch (Throwable t) {
+					t.printStackTrace();
+				}
+			}
+		}
+	}
+
+	/**
+	 * Method: newAccountFactory()
+	 * Inputs: String account type, String account name, float balance
+	 * Returns: boolean success
+	 *
+	 * Description: Creates new account
+	 */
 	private boolean newAccountFactory(String type, String name, float balance)
 		throws IllegalArgumentException {
 		
@@ -66,65 +197,6 @@ class ServerSolution implements AccountServer {
 			return false;
 		}
 		return true;
-	}
-
-	public boolean newAccount(String type, String name, float balance) 
-		throws IllegalArgumentException {
-		
-		if (balance < 0.0f) throw new IllegalArgumentException("New account may not be started with a negative balance");
-		
-		return newAccountFactory(type, name, balance);
-	}
-	
-	public boolean closeAccount(String name) {
-		Account acc = accountMap.get(name);
-		if (acc == null) {
-			return false;
-		}
-		acc.setState(State.CLOSED);
-		return true;
-	}
-
-	public Account getAccount(String name) {
-		return accountMap.get(name);
-	}
-
-	public List<Account> getAllAccounts() {
-		return new ArrayList<Account>(accountMap.values());
-	}
-
-	public List<Account> getActiveAccounts() {
-		List<Account> result = new ArrayList<Account>();
-
-		for (Account acc : accountMap.values()) {
-			if (acc.getState() != State.CLOSED) {
-				result.add(acc);
-			}
-		}
-		return result;
-	}
-	
-	public void saveAccounts() throws IOException {
-		ObjectOutputStream out = null; 
-		try {
-			out = new ObjectOutputStream(new FileOutputStream(fileName));
-
-			out.writeObject(Integer.valueOf(accountMap.size()));
-			for (String name : accountMap.keySet()) {
-				out.writeObject(accountMap.get(name));
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-			throw new IOException("Could not write file:" + fileName);
-		} finally {
-			if (out != null) {
-				try {
-					out.close();
-				} catch (Throwable t) {
-					t.printStackTrace();
-				}
-			}
-		}
 	}
 
 }
