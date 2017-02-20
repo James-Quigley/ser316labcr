@@ -61,9 +61,9 @@ class MainFrame extends JFrame {
 	 */
 	private void constructForm() {
 		//*** Make these read from properties
-		_typeLabel		= new JLabel(_props.getProperty("_typeLabel"));
-		_nameLabel		= new JLabel(_props.getProperty("_nameLabel"));
-		_balanceLabel	= new JLabel(_props.getProperty("_balanceLabel"));
+		_typeLabel		= new JLabel(_props.getProperty("TypeLabel"));
+		_nameLabel		= new JLabel(_props.getProperty("NameLabel"));
+		_balanceLabel	= new JLabel(_props.getProperty("BalanceLabel"));
 
 		Object[] accountTypes = {"Savings", "Checking"};
 		_typeOptions = new JComboBox(accountTypes);
@@ -75,12 +75,10 @@ class MainFrame extends JFrame {
 		JButton _withdrawButton = new JButton("Withdraw");
 		JButton saveButton = new JButton("Save Accounts");
 		_displayAccountsButton = new JButton("List Accounts");
-		JButton displayAllAccountsButton = new JButton("All Accounts");
 
 		this.addWindowListener(new FrameHandler());
 		_newAccountButton.addActionListener(new NewAccountHandler());
 		_displayAccountsButton.addActionListener(new DisplayHandler());
-		displayAllAccountsButton.addActionListener(new DisplayHandler());
 		_depositButton.addActionListener(new DepositHandler());
 		_withdrawButton.addActionListener(new WithdrawHandler());
 		saveButton.addActionListener(new SaveAccountsHandler());		
@@ -94,7 +92,6 @@ class MainFrame extends JFrame {
 		
 		JPanel panel2 = new JPanel();
 		panel2.add(_displayAccountsButton);
-		panel2.add(displayAllAccountsButton);
 		panel2.add(saveButton);
 		
 		JPanel panel3 = new JPanel();
