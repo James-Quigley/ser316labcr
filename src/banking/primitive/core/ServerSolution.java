@@ -35,7 +35,7 @@ class ServerSolution implements AccountServer {
 	 */
 	public ServerSolution() {
 		accountMap = new HashMap<String,Account>();
-		File file = new File(fileName);
+		File file = new File(_fileName);
 		ObjectInputStream in = null;
 		try {
 			if (file.exists()) {
@@ -149,7 +149,7 @@ class ServerSolution implements AccountServer {
 	public void saveAccounts() throws IOException {
 		ObjectOutputStream out = null; 
 		try {
-			out = new ObjectOutputStream(new FileOutputStream(fileName));
+			out = new ObjectOutputStream(new FileOutputStream(_fileName));
 
 			out.writeObject(Integer.valueOf(accountMap.size()));
 			for (String name : accountMap.keySet()) {
