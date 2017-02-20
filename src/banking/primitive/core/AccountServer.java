@@ -1,3 +1,11 @@
+/*
+ * File: AccountServer.java
+ * Author: Kevin Gary
+ * Date: February 20, 2017
+ *
+ * Description: Interface for a server that manages bank accounts
+ */
+
 package banking.primitive.core;
 
 import java.io.IOException;
@@ -5,43 +13,60 @@ import java.util.List;
 
 public interface AccountServer {
 
-	/** 
-	 *  Create a new account object in the server. if an account already exists with the given name
-	 *  then a new account is not created and stored.
-	 *  
-		@param type must be one of Savings or Checking
-		@param name leading or trailing whitespace is removed
-		@param balance must be non-negative
-		@throws IllegalArgumentException if the account type is invalid or the balance is non-negative.
-		@return boolean true if the account was created and stored, false otherwise
-	*/
-	public boolean	newAccount(String type, String name, float balance) throws IllegalArgumentException;
-
-	/** Close an account 
-		@param name leading or trailing whitespace is removed
-	 * @return boolean true if there was an account with this name and close was successful
-	*/
-	public boolean	closeAccount(String name);
-
 	/**
-	 * @param name name of the account 
-	 * @return Account object or null if not found. 
+	 * Method: getAccount()
+	 * Inputs: String account name
+	 * Returns: Account with name, or null
+	 *
+	 * Description: getter for a specific account
 	 */
 	public Account	getAccount(String name);
 
-	/** 
-	 * @return a list of all Accounts inside the server 
+	/**
+	 * Method: getAllAccounts()
+	 * Inputs:
+	 * Returns: A list of all Accounts
+	 *
+	 * Description: getter for all accounts
 	 */
 	public List<Account> getAllAccounts();
 
-	/** 
-	 * @return a list of Accounts inside the server that are not CLOSED
+	/**
+	 * Method: getActiveAccounts()
+	 * Inputs:
+	 * Returns: A list of all Accounts that are active
+	 *
+	 * Description: getter for all active accounts
 	 */
 	public List<Account> getActiveAccounts();
 
-	/** 
-	 * Saves the state of the server
-	 * @throws IOException if unable to save the state
+	/**
+	 * Method: newAccount()
+	 * Inputs:
+	 * 		String - account type (checking or savings)
+	 * 		String - account name
+	 * 		Float - starting balance
+	 * Returns: Boolean - if account creation was successful
+	 *
+	 * Description: creates a new account from params
+	 */
+	public boolean	newAccount(String type, String name, float balance) throws IllegalArgumentException;
+
+	/**
+	 * Method: closeAccount()
+	 * Inputs: String account name
+	 * Returns: Boolean if account closing was successful
+	 *
+	 * Description: Closes a specific account
+	 */
+	public boolean	closeAccount(String name);
+
+	/**
+	 * Method: saveAccounts()
+	 * Inputs:
+	 * Returns:
+	 *
+	 * Description: Writes all accounts to accounts.ser
 	 */
 	public void	saveAccounts() throws IOException;
 }
